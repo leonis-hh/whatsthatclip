@@ -70,3 +70,28 @@ h1 {
 .search-button:active {
   transform: translateY(0);
 }
+
+.result {
+  margin-top: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.result h2 {
+  color: #333;
+  margin: 0 0 10px 0;
+  font-size: 1.5rem;
+}
+
+.result p {
+  color: #666;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.search-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
