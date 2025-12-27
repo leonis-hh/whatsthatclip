@@ -6,9 +6,8 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
+          <h1>WhatsThatClip</h1>
+          <p>Find any movie or TV show from TikTok clips</p>
         <a
           className="App-link"
           href="https://reactjs.org"
