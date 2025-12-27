@@ -1,21 +1,22 @@
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-          <h1>WhatsThatClip</h1>
-          <p>Find any movie or TV show from TikTok clips</p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>WhatsThatClip</h1>
+        <p>Find any movie or TV show from TikTok clips</p>
+        
+        <div className="search-container">
+          <input 
+            type="text" 
+            placeholder="Paste TikTok link here..."
+            className="tiktok-input"
+          />
+          <button className="search-button">
+            Find Movie/Show
+          </button>
+        </div>
       </header>
     </div>
   );
