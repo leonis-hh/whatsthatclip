@@ -6,26 +6,46 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
 
-  const handleSearch = () => {
-    // Don't search if input is empty
+  // Function to fetch movie data from TMDB
+  async function fetchMovieInfo() {
+    try {
+      const response = await fetch(
+        'https://api.themoviedb.org/3/search/movie?api_key=0101271d476b11bf602d0d6db1343aa7&query=dark+knight'
+      );
+      const data = await response.json();
+      return data.results[0]; // Return first result
+    } catch (err) {
+      console.error('Error fetching movie info:', err);
+      return null;
+    }
+  }
+
+  const handleSearch = async () => {
     if (!tiktokUrl.trim()) {
       alert('Please paste a TikTok link!');
       return;
     }
 
-    // Show loading state
     setLoading(true);
     setResult(null);
 
-    // Simulate searching (we'll replace this with real API calls later)
-    setTimeout(() => {
-      setLoading(false);
+    // Fetch movie data
+    const data = await fetchMovieInfo();
+
+    // Update result state
+    if (data) {
       setResult({
-        title: 'The Dark Knight',
+        title: data.title,
         type: 'Movie',
-        year: 2008
+        year: data.release_date.split('-')[0], // Extract year from "2008-07-16"
+        overview: data.overview,
+        poster: data.poster_path
       });
-    }, 2000); // Wait 2 seconds to simulate API call
+    } else {
+      alert('Could not find movie information');
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -50,11 +70,11 @@ function App() {
             {loading ? 'Searching...' : 'Find Movie/Show'}
           </button>
 
-          {/* Show results when we have them */}
           {result && (
             <div className="result">
               <h2>{result.title}</h2>
               <p>{result.type} • {result.year}</p>
+              <p className="overview">{result.overview}</p>
             </div>
           )}
         </div>
