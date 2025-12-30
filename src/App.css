@@ -121,3 +121,12 @@ h1 {
   color: #555;
   font-size: 0.95rem;
 }
+
+.error-message {
+  margin-top: 20px;
+  padding: 15px;
+  background: #fee;
+  color: #c33;
+  border-radius: 8px;
+  border: 1px solid #fcc;
+}

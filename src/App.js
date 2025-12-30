@@ -5,6 +5,7 @@ function App() {
   const [tiktokUrl, setTiktokUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
 
   // Function to fetch movie data from TMDB
   async function fetchMovieInfo(movieName) {
@@ -28,6 +29,7 @@ function App() {
 
     setLoading(true);
     setResult(null);
+    setError(null);
 
     // Fetch movie data
     const searchTerm = tiktokUrl.trim();
@@ -42,8 +44,9 @@ function App() {
         overview: data.overview,
         poster: data.poster_path
       });
+      setError(null);
     } else {
-      alert('Could not find movie information');
+      setError('No results found. Try a different search.');
     }
 
     setLoading(false);
@@ -88,6 +91,12 @@ function App() {
                   <p className="overview">{result.overview}</p>
                 </div>
               </div>
+            </div>
+          )}
+
+          {error && (
+            <div className="error-message">
+              {error}
             </div>
           )}
         </div>
