@@ -73,25 +73,51 @@ h1 {
 
 .result {
   margin-top: 30px;
-  padding: 20px;
+  padding: 0;
   background: #f8f9fa;
-  border-radius: 8px;
+  border-radius: 12px;
+  overflow: hidden;
   text-align: left;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-.result h2 {
+.result-content {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.poster {
+  width: 150px;
+  height: 225px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  flex-shrink: 0;
+}
+
+.result-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.result-info h2 {
   color: #333;
-  margin: 0 0 10px 0;
-  font-size: 1.5rem;
-}
-
-.result p {
-  color: #666;
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.8rem;
 }
 
-.search-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.result-info .meta {
+  color: #666;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.overview {
+  margin: 0;
+  line-height: 1.6;
+  color: #555;
+  font-size: 0.95rem;
 }
