@@ -130,3 +130,72 @@ h1 {
   border-radius: 8px;
   border: 1px solid #fcc;
 }
+
+.spinner {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.divider {
+  margin: 30px 0 20px 0;
+  text-align: center;
+  position: relative;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  background: #ddd;
+  z-index: 0;
+}
+
+.divider span {
+  background: white;
+  padding: 0 15px;
+  color: #999;
+  position: relative;
+  z-index: 1;
+  font-size: 0.9rem;
+}
+
+.upload-area {
+  text-align: center;
+}
+
+.upload-label {
+  display: inline-block;
+  padding: 12px 24px;
+  background: #f0f0f0;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 1rem;
+}
+
+.upload-label:hover {
+  background: #e8e8e8;
+  border-color: #667eea;
+}
+
+.file-name {
+  margin-top: 10px;
+  color: #667eea;
+  font-size: 0.9rem;
+}
