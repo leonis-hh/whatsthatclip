@@ -8,7 +8,6 @@ function App() {
   const [error, setError] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
 
-
   // Function to fetch movie data from TMDB
   async function fetchMovieInfo(movieName) {
     try {
@@ -81,7 +80,6 @@ function App() {
     } else if (tvData && !movieData) {
       setTVResult(tvData);
     } else {
-      // Both found - compare popularity
       if (movieData.popularity > tvData.popularity) {
         setMovieResult(movieData);
       } else {
@@ -93,23 +91,30 @@ function App() {
   };
 
   const handleFileUpload = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    setUploadedFile(file);
-    console.log('File selected:', file.name);
-  }
-};
+    const file = event.target.files[0];
+    if (file) {
+      setUploadedFile(file);
+      console.log('File selected:', file.name);
+    }
+  };
+
+  const handleClear = () => {
+    setTiktokUrl('');
+    setResult(null);
+    setError(null);
+    setUploadedFile(null);
+  };
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>WhatsThatClip</h1>
-        <p>Find any movie or TV show from TikTok clips</p>
+        <p>Find any movie or TV show from short clips</p>
         
         <div className="search-container">
           <input 
             type="text" 
-            placeholder="Paste TikTok link here..."
+            placeholder="Paste TikTok or Instagram Reels link here..."
             className="tiktok-input"
             value={tiktokUrl}
             onChange={(e) => setTiktokUrl(e.target.value)}
@@ -122,25 +127,26 @@ function App() {
             {loading && <span className="spinner"></span>}
             {loading ? 'Searching...' : 'Find Movie/Show'}
           </button>
-          <div className="divider">
-  <span>OR</span>
-</div>
 
-<div className="upload-area">
-  <input
-    type="file"
-    id="file-upload"
-    accept="video/*"
-    onChange={handleFileUpload}
-    style={{ display: 'none' }}
-  />
-  <label htmlFor="file-upload" className="upload-label">
-    📁 Upload a video file
-  </label>
-  {uploadedFile && (
-    <p className="file-name">Selected: {uploadedFile.name}</p>
-  )}
-</div>
+          <div className="divider">
+            <span>OR</span>
+          </div>
+
+          <div className="upload-area">
+            <input
+              type="file"
+              id="file-upload"
+              accept="video/*"
+              onChange={handleFileUpload}
+              style={{ display: 'none' }}
+            />
+            <label htmlFor="file-upload" className="upload-label">
+              📁 Upload a video file
+            </label>
+            {uploadedFile && (
+              <p className="file-name">Selected: {uploadedFile.name}</p>
+            )}
+          </div>
 
           {result && (
             <div className="result">
@@ -166,6 +172,12 @@ function App() {
             <div className="error-message">
               {error}
             </div>
+          )}
+
+          {(result || error) && (
+            <button className="clear-button" onClick={handleClear}>
+              Start New Search
+            </button>
           )}
         </div>
       </header>
