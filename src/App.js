@@ -2,65 +2,35 @@ import { useState } from 'react';
 import './App.css';
 
 function App() {
-  const [tiktokUrl, setTiktokUrl] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
 
-  // Function to fetch movie data from TMDB
-  async function fetchMovieInfo(movieName) {
-    try {
-      const response = await fetch(
-        `https://api.tmdb.org/3/search/movie?api_key=0101271d476b11bf602d0d6db1343aa7&query=${encodeURIComponent(movieName)}`
-      );
-      const data = await response.json();
-      return data.results[0];
-    } catch (err) {
-      console.error('Error fetching movie info:', err);
-      return null;
-    }
-  }
 
-  async function fetchTVInfo(tvName) {
-    try {
-      const response = await fetch(
-        `https://api.tmdb.org/3/search/tv?api_key=0101271d476b11bf602d0d6db1343aa7&query=${encodeURIComponent(tvName)}`
-      );
-      const data = await response.json();
-      return data.results[0];
-    } catch (err) {
-      console.error('Error fetching TV Show info:', err);
-      return null;
-    }
-  }
-
-  // Helper function to set movie result
-  function setMovieResult(movieData) {
-    setResult({
-      title: movieData.title,
-      type: 'Movie',
-      year: movieData.release_date.split('-')[0],
-      overview: movieData.overview,
-      poster: movieData.poster_path
+async function analyzeVideo(searchTerm) {
+  try {
+    const response = await fetch('http://localhost:8080/api/analyze', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        videoUrl: searchTerm,
+      }),
     });
-    setError(null);
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error('Error analyzing video:', err);
+    return null;
   }
+}
 
-  // Helper function to set TV result
-  function setTVResult(tvData) {
-    setResult({
-      title: tvData.name,
-      type: 'TV Show',
-      year: tvData.first_air_date.split('-')[0],
-      overview: tvData.overview,
-      poster: tvData.poster_path
-    });
-    setError(null);
-  }
 
   const handleSearch = async () => {
-    if (!tiktokUrl.trim()) {
+    if (!videoUrl.trim()) {
       alert('Please paste a TikTok link!');
       return;
     }
@@ -68,23 +38,12 @@ function App() {
     setLoading(true);
     setResult(null);
     setError(null);
+    const data = await analyzeVideo(videoUrl.trim());
 
-    const searchTerm = tiktokUrl.trim();
-    const movieData = await fetchMovieInfo(searchTerm);
-    const tvData = await fetchTVInfo(searchTerm);
-
-    if (!movieData && !tvData) {
-      setError('No results found. Try a different search.');
-    } else if (movieData && !tvData) {
-      setMovieResult(movieData);
-    } else if (tvData && !movieData) {
-      setTVResult(tvData);
+    if (!data || !data.title) {
+      setError(data?.message || 'Something went wrong');
     } else {
-      if (movieData.popularity > tvData.popularity) {
-        setMovieResult(movieData);
-      } else {
-        setTVResult(tvData);
-      }
+      setResult(data);
     }
 
     setLoading(false);
@@ -99,7 +58,7 @@ function App() {
   };
 
   const handleClear = () => {
-    setTiktokUrl('');
+    setVideoUrl('');
     setResult(null);
     setError(null);
     setUploadedFile(null);
@@ -116,8 +75,8 @@ function App() {
             type="text" 
             placeholder="Paste TikTok or Instagram Reels link here..."
             className="tiktok-input"
-            value={tiktokUrl}
-            onChange={(e) => setTiktokUrl(e.target.value)}
+            value={videoUrl}
+            onChange={(e) => setVideoUrl(e.target.value)}
           />
           <button 
             className="search-button"
@@ -151,9 +110,9 @@ function App() {
           {result && (
             <div className="result">
               <div className="result-content">
-                {result.poster && (
+                {result.posterUrl && (
                   <img 
-                    src={`https://image.tmdb.org/t/p/w500${result.poster}`}
+                    src={result.posterUrl}
                     alt={result.title}
                     className="poster"
                   />
