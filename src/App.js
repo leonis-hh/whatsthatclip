@@ -7,6 +7,8 @@ function App() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
 
 
 async function analyzeVideo(searchTerm) {
@@ -48,6 +50,28 @@ async function analyzeVideo(searchTerm) {
 
     setLoading(false);
   };
+
+  const fetchHistory = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/history', {
+        method: 'GET',});
+      const history = await response.json();
+      return history;
+      } catch (err) {
+      console.error('Error fetching history:', err);
+      return null;
+    }
+  };
+
+  const handleShowHistory = async () => {
+    if (showHistory) {
+        setShowHistory(false);
+    } else {
+      const historyData = await fetchHistory();
+      setHistory(historyData);
+      setShowHistory(true);
+    }
+};
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -106,6 +130,21 @@ async function analyzeVideo(searchTerm) {
               <p className="file-name">Selected: {uploadedFile.name}</p>
             )}
           </div>
+
+          <button className="history-button" onClick={handleShowHistory}>
+            {showHistory ? 'Hide History' : 'View History'}
+          </button>
+
+          {showHistory && history && (
+              <div className="history-list">
+              <h3>Search History</h3>
+              {history.slice(0,5).map((item) => (
+                <div key={item.id} className="history-item">
+                  < p><strong>{item.title}</strong> ({item.type})</p>
+                </div>
+        ))}
+          </div>
+)}
 
           {result && (
             <div className="result">
